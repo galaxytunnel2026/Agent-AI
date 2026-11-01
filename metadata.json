@@ -1,0 +1,6 @@
+{
+  "name": "AgentFlow AI - Autonomous Workflow & Dev Studio",
+  "description": "AI Agent Autoflow system featuring real-time Web Search, Platform Inspector, AI Image Generation, Date & Time Engine, and Developer Sandbox Terminal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,626 @@
+{
+  "workflows": [
+    {
+      "id": "wf_platform_inspector",
+      "name": "Platform Intelligence & Architecture Scraper",
+      "description": "Inspects any tech platform or official website, extracts purpose, SDK, architecture & writes report to developer sandbox.",
+      "category": "Platform & Docs",
+      "createdAt": "2026-11-01T05:34:10.975Z",
+      "updatedAt": "2026-11-01T05:34:10.975Z",
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "trigger",
+          "label": "Start: Platform Input",
+          "config": {
+            "targetPlatform": "Firebase",
+            "inspectMode": "architecture"
+          },
+          "position": {
+            "x": 80,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "platform_inspector",
+          "label": "Official Platform Docs Inspector",
+          "config": {
+            "urlOrPlatform": "{{trigger.targetPlatform}}",
+            "deepInspection": true
+          },
+          "position": {
+            "x": 380,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "code_sandbox",
+          "label": "Developer Sandbox / Spec Generator",
+          "config": {
+            "language": "javascript",
+            "code": "// Formats platform intelligence into structured markdown spec\nconst platformData = inputs.node_2;\nconst report = `# ${platformData.platformName} Technical Analysis\\n\\n**Purpose:** ${platformData.purpose}\\n\\n## Architecture\\n${platformData.architecture}\\n\\n## Official Docs\\n${platformData.officialDocsUrl}`;\nreturn { report, byteSize: report.length, generatedAt: new Date().toISOString() };"
+          },
+          "position": {
+            "x": 700,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "db_sink",
+          "label": "Save Report to Workspace File",
+          "config": {
+            "fileName": "platform_spec.md"
+          },
+          "position": {
+            "x": 1020,
+            "y": 150
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1-2",
+          "source": "node_1",
+          "target": "node_2"
+        },
+        {
+          "id": "e2-3",
+          "source": "node_2",
+          "target": "node_3"
+        },
+        {
+          "id": "e3-4",
+          "source": "node_3",
+          "target": "node_4"
+        }
+      ]
+    },
+    {
+      "id": "wf_agent_research_code",
+      "name": "Full-Stack Agent: Search, Code & Test Sandbox",
+      "description": "Autonomous ReAct Agent searches for latest libraries, runs benchmark code in sandbox, and generates visual summary.",
+      "category": "Dev & AI Agent",
+      "createdAt": "2026-11-01T05:34:10.975Z",
+      "updatedAt": "2026-11-01T05:34:10.975Z",
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "trigger",
+          "label": "Trigger: Developer Goal",
+          "config": {
+            "goal": "Compare modern high-performance TypeScript array sorting algorithms and visualize speed"
+          },
+          "position": {
+            "x": 80,
+            "y": 180
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "date_time",
+          "label": "Real Date & Time Context",
+          "config": {
+            "timezone": "UTC"
+          },
+          "position": {
+            "x": 340,
+            "y": 80
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "agent",
+          "label": "Autonomous ReAct Agent",
+          "config": {
+            "tools": [
+              "google_search",
+              "execute_code_sandbox",
+              "terminal_command",
+              "file_system"
+            ],
+            "systemPrompt": "You are an elite Senior Staff Software Engineer and AI automation agent. Test your ideas in sandbox before reporting."
+          },
+          "position": {
+            "x": 640,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "image_gen",
+          "label": "Generate Architecture Diagram",
+          "config": {
+            "style": "minimalist modern technical blueprint",
+            "prompt": "Modern high throughput data flow architecture diagram"
+          },
+          "position": {
+            "x": 960,
+            "y": 150
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1-3",
+          "source": "node_1",
+          "target": "node_3"
+        },
+        {
+          "id": "e2-3",
+          "source": "node_2",
+          "target": "node_3"
+        },
+        {
+          "id": "e3-4",
+          "source": "node_3",
+          "target": "node_4"
+        }
+      ]
+    },
+    {
+      "id": "wf_live_web_digest",
+      "name": "Real-Time Web Intelligence & Date Briefing",
+      "description": "Queries live search for breaking technology releases, parses dates accurately, and stores summaries.",
+      "category": "Intelligence",
+      "createdAt": "2026-11-01T05:34:10.975Z",
+      "updatedAt": "2026-11-01T05:34:10.975Z",
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "trigger",
+          "label": "Schedule / Manual Run",
+          "config": {
+            "query": "Latest major AI Agent frameworks and developer tools released this week"
+          },
+          "position": {
+            "x": 80,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "search",
+          "label": "Web Search Engine",
+          "config": {
+            "searchDepth": "deep"
+          },
+          "position": {
+            "x": 360,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "agent",
+          "label": "Synthesis Agent",
+          "config": {
+            "tools": [
+              "inspect_platform_or_url",
+              "file_system"
+            ]
+          },
+          "position": {
+            "x": 660,
+            "y": 150
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "db_sink",
+          "label": "Database Store",
+          "config": {
+            "collection": "weekly_briefs"
+          },
+          "position": {
+            "x": 960,
+            "y": 150
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1-2",
+          "source": "node_1",
+          "target": "node_2"
+        },
+        {
+          "id": "e2-3",
+          "source": "node_2",
+          "target": "node_3"
+        },
+        {
+          "id": "e3-4",
+          "source": "node_3",
+          "target": "node_4"
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "id": "run_1793512893845_ph9gk",
+      "workflowId": "wf_platform_inspector",
+      "workflowName": "Platform Intelligence & Architecture Scraper",
+      "status": "completed",
+      "startedAt": "2026-11-01T06:01:33.845Z",
+      "triggerInput": {
+        "targetPlatform": "Supabase",
+        "query": "Supabase",
+        "goal": "Supabase"
+      },
+      "nodeOutputs": {
+        "node_1": {
+          "targetPlatform": "Supabase",
+          "inspectMode": "architecture",
+          "query": "Supabase",
+          "goal": "Supabase",
+          "triggeredAt": "2026-11-01T06:01:33.846Z"
+        },
+        "node_2": {
+          "platformName": "Supabase",
+          "url": "https://supabase.com",
+          "tagline": "The open source Firebase alternative with relational PostgreSQL",
+          "purpose": "Gives developers a dedicated PostgreSQL database with real-time subscriptions, instant REST and GraphQL APIs, Auth, and Storage, without vendor lock-in.",
+          "howItWorks": "Wraps PostgreSQL with PostgREST (for automatic REST API generation), Realtime engine (listening to Postgres replication stream via Elixir), GoTrue for Auth, and Kong API gateway.",
+          "architecture": [
+            "PostgreSQL: Full relational engine with extensions (pgvector, PostGIS)",
+            "PostgREST: Auto-generated REST endpoints from Postgres schemas and tables",
+            "Row Level Security (RLS): Native Postgres security policies determining row access per JWT token",
+            "Realtime Server: Elixir cluster broadcasting database change events over WebSockets",
+            "Edge Functions: Deno-based serverless functions at the edge"
+          ],
+          "keyFeatures": [
+            "PostgreSQL & SQL power",
+            "Row Level Security (RLS)",
+            "Auto-generated REST & GraphQL APIs",
+            "Vector database with pgvector",
+            "Storage with image resizing"
+          ],
+          "sdkSupport": [
+            "JavaScript/TypeScript",
+            "Python",
+            "Flutter",
+            "Swift",
+            "Kotlin",
+            "Go"
+          ],
+          "freeTierInfo": "Free Tier: 2 active projects, 500 MB database, 1 GB file storage, 50k monthly active users, 500k edge function invocations.",
+          "officialDocsUrl": "https://supabase.com/docs",
+          "sampleCode": "// Supabase Client Quickstart\nimport { createClient } from '@supabase/supabase-js';\n\nconst supabase = createClient('https://xyz.supabase.co', 'public-anon-key');\n\n// Query PostgreSQL with Row Level Security\nconst { data, error } = await supabase\n  .from('workflows')\n  .select('*')\n  .order('created_at', { ascending: false });",
+          "inspectedAt": "2026-11-01T06:01:33.847Z",
+          "source": "official_spec_cache"
+        },
+        "node_3": {
+          "success": true,
+          "returnValue": {
+            "report": "# Supabase Technical Analysis\n\n**Purpose:** Gives developers a dedicated PostgreSQL database with real-time subscriptions, instant REST and GraphQL APIs, Auth, and Storage, without vendor lock-in.\n\n## Architecture\nPostgreSQL: Full relational engine with extensions (pgvector, PostGIS),PostgREST: Auto-generated REST endpoints from Postgres schemas and tables,Row Level Security (RLS): Native Postgres security policies determining row access per JWT token,Realtime Server: Elixir cluster broadcasting database change events over WebSockets,Edge Functions: Deno-based serverless functions at the edge\n\n## Official Docs\nhttps://supabase.com/docs",
+            "byteSize": 643,
+            "generatedAt": "2026-11-01T06:01:33.849Z"
+          },
+          "logs": [],
+          "errors": [],
+          "executionTimeMs": 2
+        },
+        "node_4": {
+          "savedFile": {
+            "name": "platform_spec.md",
+            "path": "/workspace/platform_spec.md",
+            "content": "{\n  \"node_3\": {\n    \"success\": true,\n    \"returnValue\": {\n      \"report\": \"# Supabase Technical Analysis\\n\\n**Purpose:** Gives developers a dedicated PostgreSQL database with real-time subscriptions, instant REST and GraphQL APIs, Auth, and Storage, without vendor lock-in.\\n\\n## Architecture\\nPostgreSQL: Full relational engine with extensions (pgvector, PostGIS),PostgREST: Auto-generated REST endpoints from Postgres schemas and tables,Row Level Security (RLS): Native Postgres security policies determining row access per JWT token,Realtime Server: Elixir cluster broadcasting database change events over WebSockets,Edge Functions: Deno-based serverless functions at the edge\\n\\n## Official Docs\\nhttps://supabase.com/docs\",\n      \"byteSize\": 643,\n      \"generatedAt\": \"2026-11-01T06:01:33.849Z\"\n    },\n    \"logs\": [],\n    \"errors\": [],\n    \"executionTimeMs\": 2\n  }\n}",
+            "updatedAt": "2026-11-01T06:01:33.851Z",
+            "sizeBytes": 871
+          },
+          "path": "/workspace/platform_spec.md",
+          "sizeBytes": 871
+        }
+      },
+      "logs": [
+        {
+          "timestamp": "2026-11-01T06:01:33.845Z",
+          "level": "info",
+          "message": "Starting workflow \"Platform Intelligence & Architecture Scraper\" (4 nodes, 3 edges)"
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.846Z",
+          "nodeId": "node_1",
+          "level": "info",
+          "message": "Executing node [Start: Platform Input] (trigger)"
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.846Z",
+          "nodeId": "node_1",
+          "level": "success",
+          "message": "Node [Start: Platform Input] finished successfully",
+          "data": [
+            "targetPlatform",
+            "inspectMode",
+            "query",
+            "goal",
+            "triggeredAt"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.847Z",
+          "nodeId": "node_2",
+          "level": "info",
+          "message": "Executing node [Official Platform Docs Inspector] (platform_inspector)"
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.847Z",
+          "nodeId": "node_2",
+          "level": "success",
+          "message": "Node [Official Platform Docs Inspector] finished successfully",
+          "data": [
+            "platformName",
+            "url",
+            "tagline",
+            "purpose",
+            "howItWorks",
+            "architecture",
+            "keyFeatures",
+            "sdkSupport",
+            "freeTierInfo",
+            "officialDocsUrl",
+            "sampleCode",
+            "inspectedAt",
+            "source"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.848Z",
+          "nodeId": "node_3",
+          "level": "info",
+          "message": "Executing node [Developer Sandbox / Spec Generator] (code_sandbox)"
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.850Z",
+          "nodeId": "node_3",
+          "level": "success",
+          "message": "Node [Developer Sandbox / Spec Generator] finished successfully",
+          "data": [
+            "success",
+            "returnValue",
+            "logs",
+            "errors",
+            "executionTimeMs"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.851Z",
+          "nodeId": "node_4",
+          "level": "info",
+          "message": "Executing node [Save Report to Workspace File] (db_sink)"
+        },
+        {
+          "timestamp": "2026-11-01T06:01:33.851Z",
+          "nodeId": "node_4",
+          "level": "success",
+          "message": "Node [Save Report to Workspace File] finished successfully",
+          "data": [
+            "savedFile",
+            "path",
+            "sizeBytes"
+          ]
+        }
+      ],
+      "finishedAt": "2026-11-01T06:01:33.851Z",
+      "durationMs": 6,
+      "finalResult": {
+        "savedFile": {
+          "name": "platform_spec.md",
+          "path": "/workspace/platform_spec.md",
+          "content": "{\n  \"node_3\": {\n    \"success\": true,\n    \"returnValue\": {\n      \"report\": \"# Supabase Technical Analysis\\n\\n**Purpose:** Gives developers a dedicated PostgreSQL database with real-time subscriptions, instant REST and GraphQL APIs, Auth, and Storage, without vendor lock-in.\\n\\n## Architecture\\nPostgreSQL: Full relational engine with extensions (pgvector, PostGIS),PostgREST: Auto-generated REST endpoints from Postgres schemas and tables,Row Level Security (RLS): Native Postgres security policies determining row access per JWT token,Realtime Server: Elixir cluster broadcasting database change events over WebSockets,Edge Functions: Deno-based serverless functions at the edge\\n\\n## Official Docs\\nhttps://supabase.com/docs\",\n      \"byteSize\": 643,\n      \"generatedAt\": \"2026-11-01T06:01:33.849Z\"\n    },\n    \"logs\": [],\n    \"errors\": [],\n    \"executionTimeMs\": 2\n  }\n}",
+          "updatedAt": "2026-11-01T06:01:33.851Z",
+          "sizeBytes": 871
+        },
+        "path": "/workspace/platform_spec.md",
+        "sizeBytes": 871
+      }
+    },
+    {
+      "id": "run_1793512268845_dsur8",
+      "workflowId": "wf_platform_inspector",
+      "workflowName": "Platform Intelligence & Architecture Scraper",
+      "status": "completed",
+      "startedAt": "2026-11-01T05:51:08.845Z",
+      "triggerInput": {
+        "triggeredBy": "AgentFlow UI Studio",
+        "timestamp": "2026-11-01T05:51:09.120Z"
+      },
+      "nodeOutputs": {
+        "node_1": {
+          "targetPlatform": "Firebase",
+          "inspectMode": "architecture",
+          "triggeredBy": "AgentFlow UI Studio",
+          "timestamp": "2026-11-01T05:51:09.120Z",
+          "triggeredAt": "2026-11-01T05:51:08.846Z"
+        },
+        "node_2": {
+          "platformName": "Google Firebase",
+          "url": "https://firebase.google.com",
+          "tagline": "Google's comprehensive mobile and web app development platform",
+          "purpose": "Provides backend infrastructure (NoSQL Firestore, Authentication, Cloud Storage, Cloud Functions, Hosting, Analytics) so developers can build apps quickly without managing physical servers.",
+          "howItWorks": "Operates as a Backend-as-a-Service (BaaS) built on top of Google Cloud Platform (GCP). Clients interact directly with Firestore and Auth using client-side SDKs with security rules handling authorization, while Cloud Functions execute event-driven serverless Node/Python logic.",
+          "architecture": [
+            "Cloud Firestore: Scalable NoSQL document database with real-time listeners and offline sync",
+            "Firebase Auth: Managed identity supporting Email/Password, Google, GitHub, Apple OAuth, and Phone SMS",
+            "Cloud Storage: Object storage for photos, audio, videos with granular security rules",
+            "Cloud Functions: Serverless event-driven compute triggered by Firestore writes, Auth events, or HTTPS requests",
+            "Security Rules: Declarative authorization expressions evaluated per request"
+          ],
+          "keyFeatures": [
+            "Real-time listeners (snapshot)",
+            "Offline persistence",
+            "Pre-built auth UI",
+            "Static & SSR Hosting CDN",
+            "Crashlytics and Analytics"
+          ],
+          "sdkSupport": [
+            "Web / JavaScript / TypeScript",
+            "Android (Kotlin/Java)",
+            "iOS (Swift)",
+            "Flutter",
+            "React Native",
+            "Node.js Admin",
+            "Python Admin"
+          ],
+          "freeTierInfo": "Spark Plan (Free): 1 GB Firestore storage, 50k reads/day, 20k writes/day, 10 GB hosting transfer/month, phone auth 10k/month.",
+          "officialDocsUrl": "https://firebase.google.com/docs",
+          "sampleCode": "// Firebase Firestore Quickstart (v10+)\nimport { initializeApp } from 'firebase/app';\nimport { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';\n\nconst app = initializeApp({ /* firebaseConfig */ });\nconst db = getFirestore(app);\n\n// Add document\nawait addDoc(collection(db, \"tasks\"), {\n  title: \"Build AgentFlow\",\n  completed: false,\n  createdAt: new Date()\n});",
+          "inspectedAt": "2026-11-01T05:51:08.847Z",
+          "source": "official_spec_cache"
+        },
+        "node_3": {
+          "success": true,
+          "returnValue": {
+            "report": "# Google Firebase Technical Analysis\n\n**Purpose:** Provides backend infrastructure (NoSQL Firestore, Authentication, Cloud Storage, Cloud Functions, Hosting, Analytics) so developers can build apps quickly without managing physical servers.\n\n## Architecture\nCloud Firestore: Scalable NoSQL document database with real-time listeners and offline sync,Firebase Auth: Managed identity supporting Email/Password, Google, GitHub, Apple OAuth, and Phone SMS,Cloud Storage: Object storage for photos, audio, videos with granular security rules,Cloud Functions: Serverless event-driven compute triggered by Firestore writes, Auth events, or HTTPS requests,Security Rules: Declarative authorization expressions evaluated per request\n\n## Official Docs\nhttps://firebase.google.com/docs",
+            "byteSize": 774,
+            "generatedAt": "2026-11-01T05:51:08.849Z"
+          },
+          "logs": [],
+          "errors": [],
+          "executionTimeMs": 1
+        },
+        "node_4": {
+          "savedFile": {
+            "name": "platform_spec.md",
+            "path": "/workspace/platform_spec.md",
+            "content": "{\n  \"node_3\": {\n    \"success\": true,\n    \"returnValue\": {\n      \"report\": \"# Google Firebase Technical Analysis\\n\\n**Purpose:** Provides backend infrastructure (NoSQL Firestore, Authentication, Cloud Storage, Cloud Functions, Hosting, Analytics) so developers can build apps quickly without managing physical servers.\\n\\n## Architecture\\nCloud Firestore: Scalable NoSQL document database with real-time listeners and offline sync,Firebase Auth: Managed identity supporting Email/Password, Google, GitHub, Apple OAuth, and Phone SMS,Cloud Storage: Object storage for photos, audio, videos with granular security rules,Cloud Functions: Serverless event-driven compute triggered by Firestore writes, Auth events, or HTTPS requests,Security Rules: Declarative authorization expressions evaluated per request\\n\\n## Official Docs\\nhttps://firebase.google.com/docs\",\n      \"byteSize\": 774,\n      \"generatedAt\": \"2026-11-01T05:51:08.849Z\"\n    },\n    \"logs\": [],\n    \"errors\": [],\n    \"executionTimeMs\": 1\n  }\n}",
+            "updatedAt": "2026-11-01T05:51:08.850Z",
+            "sizeBytes": 1002
+          },
+          "path": "/workspace/platform_spec.md",
+          "sizeBytes": 1002
+        }
+      },
+      "logs": [
+        {
+          "timestamp": "2026-11-01T05:51:08.845Z",
+          "level": "info",
+          "message": "Starting workflow \"Platform Intelligence & Architecture Scraper\" (4 nodes, 3 edges)"
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.846Z",
+          "nodeId": "node_1",
+          "level": "info",
+          "message": "Executing node [Start: Platform Input] (trigger)"
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.846Z",
+          "nodeId": "node_1",
+          "level": "success",
+          "message": "Node [Start: Platform Input] finished successfully",
+          "data": [
+            "targetPlatform",
+            "inspectMode",
+            "triggeredBy",
+            "timestamp",
+            "triggeredAt"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.846Z",
+          "nodeId": "node_2",
+          "level": "info",
+          "message": "Executing node [Official Platform Docs Inspector] (platform_inspector)"
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.847Z",
+          "nodeId": "node_2",
+          "level": "success",
+          "message": "Node [Official Platform Docs Inspector] finished successfully",
+          "data": [
+            "platformName",
+            "url",
+            "tagline",
+            "purpose",
+            "howItWorks",
+            "architecture",
+            "keyFeatures",
+            "sdkSupport",
+            "freeTierInfo",
+            "officialDocsUrl",
+            "sampleCode",
+            "inspectedAt",
+            "source"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.847Z",
+          "nodeId": "node_3",
+          "level": "info",
+          "message": "Executing node [Developer Sandbox / Spec Generator] (code_sandbox)"
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.849Z",
+          "nodeId": "node_3",
+          "level": "success",
+          "message": "Node [Developer Sandbox / Spec Generator] finished successfully",
+          "data": [
+            "success",
+            "returnValue",
+            "logs",
+            "errors",
+            "executionTimeMs"
+          ]
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.850Z",
+          "nodeId": "node_4",
+          "level": "info",
+          "message": "Executing node [Save Report to Workspace File] (db_sink)"
+        },
+        {
+          "timestamp": "2026-11-01T05:51:08.850Z",
+          "nodeId": "node_4",
+          "level": "success",
+          "message": "Node [Save Report to Workspace File] finished successfully",
+          "data": [
+            "savedFile",
+            "path",
+            "sizeBytes"
+          ]
+        }
+      ],
+      "finishedAt": "2026-11-01T05:51:08.850Z",
+      "durationMs": 5,
+      "finalResult": {
+        "savedFile": {
+          "name": "platform_spec.md",
+          "path": "/workspace/platform_spec.md",
+          "content": "{\n  \"node_3\": {\n    \"success\": true,\n    \"returnValue\": {\n      \"report\": \"# Google Firebase Technical Analysis\\n\\n**Purpose:** Provides backend infrastructure (NoSQL Firestore, Authentication, Cloud Storage, Cloud Functions, Hosting, Analytics) so developers can build apps quickly without managing physical servers.\\n\\n## Architecture\\nCloud Firestore: Scalable NoSQL document database with real-time listeners and offline sync,Firebase Auth: Managed identity supporting Email/Password, Google, GitHub, Apple OAuth, and Phone SMS,Cloud Storage: Object storage for photos, audio, videos with granular security rules,Cloud Functions: Serverless event-driven compute triggered by Firestore writes, Auth events, or HTTPS requests,Security Rules: Declarative authorization expressions evaluated per request\\n\\n## Official Docs\\nhttps://firebase.google.com/docs\",\n      \"byteSize\": 774,\n      \"generatedAt\": \"2026-11-01T05:51:08.849Z\"\n    },\n    \"logs\": [],\n    \"errors\": [],\n    \"executionTimeMs\": 1\n  }\n}",
+          "updatedAt": "2026-11-01T05:51:08.850Z",
+          "sizeBytes": 1002
+        },
+        "path": "/workspace/platform_spec.md",
+        "sizeBytes": 1002
+      }
+    }
+  ],
+  "workspaceFiles": [
+    {
+      "name": "welcome.md",
+      "path": "/workspace/welcome.md",
+      "content": "# Welcome to AgentFlow Studio Workspace\n\nThis is your agent's virtual developer environment.\n\n- The AI Agent can read and write files here using tools.\n- You can open files, edit code, and run scripts in the Terminal Sandbox.\n- Supports JavaScript/TypeScript execution, platform inspection, and real-time search.\n",
+      "updatedAt": "2026-11-01T05:34:10.975Z",
+      "sizeBytes": 320
+    },
+    {
+      "name": "sample_script.js",
+      "path": "/workspace/sample_script.js",
+      "content": "// Sample Sandbox Script\nconst numbers = [12, 45, 68, 23, 91, 5, 87];\nconst squaredEvens = numbers.filter(n => n % 2 === 0).map(n => n * n);\nconsole.log(\"Original numbers:\", numbers);\nconsole.log(\"Squared evens:\", squaredEvens);\n\nreturn {\n  count: numbers.length,\n  evenCount: squaredEvens.length,\n  sum: squaredEvens.reduce((a, b) => a + b, 0),\n  timestamp: new Date().toISOString()\n};",
+      "updatedAt": "2026-11-01T05:34:10.975Z",
+      "sizeBytes": 380
+    },
+    {
+      "name": "platform_spec.md",
+      "path": "/workspace/platform_spec.md",
+      "content": "{\n  \"node_3\": {\n    \"success\": true,\n    \"returnValue\": {\n      \"report\": \"# Supabase Technical Analysis\\n\\n**Purpose:** Gives developers a dedicated PostgreSQL database with real-time subscriptions, instant REST and GraphQL APIs, Auth, and Storage, without vendor lock-in.\\n\\n## Architecture\\nPostgreSQL: Full relational engine with extensions (pgvector, PostGIS),PostgREST: Auto-generated REST endpoints from Postgres schemas and tables,Row Level Security (RLS): Native Postgres security policies determining row access per JWT token,Realtime Server: Elixir cluster broadcasting database change events over WebSockets,Edge Functions: Deno-based serverless functions at the edge\\n\\n## Official Docs\\nhttps://supabase.com/docs\",\n      \"byteSize\": 643,\n      \"generatedAt\": \"2026-11-01T06:01:33.849Z\"\n    },\n    \"logs\": [],\n    \"errors\": [],\n    \"executionTimeMs\": 2\n  }\n}",
+      "updatedAt": "2026-11-01T06:01:33.851Z",
+      "sizeBytes": 871
+    }
+  ],
+  "generatedImages": []
+}
